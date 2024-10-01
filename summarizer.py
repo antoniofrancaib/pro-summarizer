@@ -1,7 +1,8 @@
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
 
-# Set your OpenAI API key here or set it as an environment variable
+load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
 
 client = OpenAI(
@@ -24,7 +25,7 @@ def read_text_file(file_path):
 def generate_summary(text):
     """Calls the OpenAI API to generate a summary in Markdown format."""
 
-    chat_completion = client.chat.completions.create(
+    response = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
@@ -33,18 +34,7 @@ def generate_summary(text):
         ],
         model="gpt-4o-mini",
     )
-    return chat_completion.choices[0].message.content.strip()
-    try:
-        response = openai.Completion.create(
-            model="gpt-4",
-            prompt=f"Summarize the following text in detailed Markdown format:\n\n{text}",
-            max_tokens=1024,
-            temperature=0.5
-        )
-        summary = response.choices[0].text.strip()
-        return summary
-    except Exception as e:
-        raise Exception(f"Failed to generate the summary using the OpenAI API: {e}")
+    return response.choices[0].message.content.strip()
 
 def write_summary_to_file(summary, output_path):
     """Writes the generated summary to a .txt file."""
@@ -57,15 +47,12 @@ def write_summary_to_file(summary, output_path):
 
 def main():
     try:
-        # Step 1: Read the input file (automatically uses extracted_text.txt)
-        input_file = 'extracted_text.txt'
+        input_file = 'assets/output/extracted_text.txt'
         text_content = read_text_file(input_file)
 
-        # Step 2: Generate the summary using GPT-4
         print(f"Generating summary using GPT-4...")
         summary = generate_summary(text_content)
 
-        # Step 3: Write the summary to a new .txt file
         output_file = input("Enter the path to save the output summary (e.g., 'summary_output.txt'): ")
         write_summary_to_file(summary, output_file)
 

@@ -1,7 +1,7 @@
 import PyPDF2
 
-pdf_file = 'barbero22a.pdf'  
-output_file = 'extracted_text.txt'  
+pdf_file = 'assets/pdf/barbero22a.pdf'  
+output_file = 'assets/output/extracted_text.txt'  
 
 pdf_reader = PyPDF2.PdfReader(pdf_file)
 num_pages = len(pdf_reader.pages)
